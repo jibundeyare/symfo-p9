@@ -48,6 +48,13 @@ class DbTestController extends AbstractController
             }
         }
 
+        // récupération du repository des pages
+        $repository = $doctrine->getRepository(Page::class);
+        // récupération de la liste complète de toutes les pages
+        $pages = $repository->findAll();
+        // inspections de la liste des pages
+        dump($pages);
+
         exit();
     }
 }

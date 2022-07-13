@@ -27,6 +27,7 @@ class TestFixtures extends Fixture
         $this->loadCategories($manager, $faker);
         $this->loadTags($manager, $faker);
         $this->loadArticles($manager, $faker);
+        $this->loadPages($manager, $faker);
     }
 
     public function loadCategories(ObjectManager $manager, FakerGenerator $faker): void
@@ -135,10 +136,69 @@ class TestFixtures extends Fixture
 
             $article->setPublishedAt($date);
 
+            // sélection d'une catégorie depuis la liste complète
+            // attention, la fonction renvoie un tableau, c'est pour ça qu'il faut utiliser [0] pour récupérer le premier élément du tableau
             $category = $faker->randomElements($categories)[0];
             $article->setCategory($category);
 
+            // génération d'un nombre aléatoire compris entre 0 et 4 inclus
+            $count = random_int(0, 4);
+            // sélection de 0, 1, 2, 3 ou 4 tags depuis la liste complète
+            $articleTags = $faker->randomElements($tags, $count);
+
+            foreach ($articleTags as $tag) {
+                $article->addTag($tag);
+            }
+
             $manager->persist($article);
+        }
+
+        $manager->flush();
+    }
+
+    public function loadPages(ObjectManager $manager, FakerGenerator $faker): void
+    {
+        $repository = $this->doctrine->getRepository(Category::class);
+        $categories = $repository->findAll();
+
+        $pageDatas = [
+            [
+                'title' => 'La cuisine française',
+                'body' => "C'est la cuisine de la France.",
+                'category' => $categories[0],
+            ],
+            [
+                'title' => 'La cuisine italienne',
+                'body' => "C'est la cuisine de l'Italie.",
+                'category' => $categories[1],
+            ],
+            [
+                'title' => 'La uisine ukrainienne',
+                'body' => "C'est la cuisine de l'Ukraine.",
+                'category' => $categories[2],
+            ],
+        ];
+
+        foreach ($pageDatas as $pageData) {
+            $page = new Page();
+            $page->setTitle($pageData['title']);
+            $page->setBody($pageData['body']);
+            $page->setCategory($pageData['category']);
+
+            $manager->persist($page);
+        }
+
+        for ($i = 0; $i < 10;$i++) {
+            $page = new Page();
+            $page->setTitle($faker->sentence());
+            $page->setBody($faker->paragraph(6));
+
+            // sélection d'une catégorie depuis la liste complète
+            // attention, la fonction renvoie un tableau, c'est pour ça qu'il faut utiliser [0] pour récupérer le premier élément du tableau
+            $category = $faker->randomElements($categories)[0];
+            $page->setCategory($category);
+
+            $manager->persist($page);
         }
 
         $manager->flush();
