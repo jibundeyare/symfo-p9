@@ -120,13 +120,40 @@ class DbTestController extends AbstractController
     }
 
     #[Route('/db/test/repository', name: 'app_db_test_repository')]
-    public function repository(ArticleRepository $repository): Response
+    public function repository(
+        ArticleRepository $articleRepository,
+        EditorRepository $editorRepository,
+        UserRepository $userRepository,
+        WriterRepository $writerRepository
+    ): Response
     {
-        $articles = $repository->findAllSorted();
+        $articles = $articleRepository->findAllSorted();
         dump($articles);
 
-        $articles = $repository->findByKeyword('plat');
+        $articles = $articleRepository->findByKeyword('plat');
         dump($articles);
+
+        $writer = $writerRepository->find(1);
+        $user = $writer->getUser();
+        // force doctrine à lancer le lazy loading
+        $user->getEmail();
+        dump($user);
+
+        $editor = $editorRepository->find(1);
+        $user = $editor->getUser();
+        // force doctrine à lancer le lazy loading
+        $user->getEmail();
+        dump($user);
+
+        $user1 = $userRepository->find(1);
+        // force doctrine à lancer le lazy loading
+        $user1->getEmail();
+        dump($user1);
+
+        $user2 = $userRepository->find(2);
+        // force doctrine à lancer le lazy loading
+        $user2->getEmail();
+        dump($user2);
 
         exit();
     }
