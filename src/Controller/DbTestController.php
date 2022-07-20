@@ -122,6 +122,9 @@ class DbTestController extends AbstractController
         $articles = $repository->findAllSorted();
         dump($articles);
 
+        $articles = $repository->findByKeyword('plat');
+        dump($articles);
+
         exit();
     }
 }
