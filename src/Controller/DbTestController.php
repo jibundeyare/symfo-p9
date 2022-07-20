@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Page;
 use App\Entity\Tag;
+use App\Repository\ArticleRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,6 +112,15 @@ class DbTestController extends AbstractController
         $manager->persist($tag);
         $manager->flush();
         dump($tag);
+
+        exit();
+    }
+
+    #[Route('/db/test/repository', name: 'app_db_test_repository')]
+    public function repository(ArticleRepository $repository): Response
+    {
+        $articles = $repository->findAllSorted();
+        dump($articles);
 
         exit();
     }

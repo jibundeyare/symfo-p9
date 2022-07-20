@@ -39,6 +39,18 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+   /**
+    * @return Article[] Returns an array of Article objects
+    */
+   public function findAllSorted(): array
+   {
+       return $this->createQueryBuilder('a')
+            ->orderBy('a.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */
