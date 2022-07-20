@@ -30,6 +30,9 @@ class Article
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'articles')]
     private $category;
 
+    #[ORM\ManyToOne(targetEntity: Writer::class, inversedBy: 'articles')]
+    private $writer;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -108,6 +111,18 @@ class Article
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getWriter(): ?Writer
+    {
+        return $this->writer;
+    }
+
+    public function setWriter(?Writer $writer): self
+    {
+        $this->writer = $writer;
 
         return $this;
     }

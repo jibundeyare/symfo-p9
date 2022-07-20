@@ -27,6 +27,9 @@ class Page
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'pages')]
     private $tags;
 
+    #[ORM\ManyToOne(targetEntity: Writer::class, inversedBy: 'pages')]
+    private $writer;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -93,6 +96,18 @@ class Page
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getWriter(): ?Writer
+    {
+        return $this->writer;
+    }
+
+    public function setWriter(?Writer $writer): self
+    {
+        $this->writer = $writer;
 
         return $this;
     }
