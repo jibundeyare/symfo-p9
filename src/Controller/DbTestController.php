@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Page;
@@ -171,6 +172,11 @@ class DbTestController extends AbstractController
 
         $articles = $articleRepository->findByPublishedAtIsNull();
         dump($articles);
+
+        $date = DateTime::createFromFormat('Y-m-d H:i:s', '2022-06-30 00:00:00');
+        $articles = $articleRepository->findByPublishedAtBefore($date);
+        dump($articles);
+
         exit();
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use DateTime;
+use DateInterval;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,7 +51,7 @@ class ArticleRepository extends ServiceEntityRepository
            ->orWhere('a.body LIKE :keyword')
            ->setParameter('keyword', "%{$keyword}%")
            ->orderBy('a.title', 'ASC')
-           ->orderBy('a.published_at', 'ASC')
+           ->addOrderBy('a.published_at', 'ASC')
            ->getQuery()
            ->getResult()
        ;
@@ -75,7 +77,27 @@ class ArticleRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('a')
            ->andWhere('a.published_at IS NULL')
            ->orderBy('a.title', 'ASC')
-           ->orderBy('a.body', 'ASC')
+           ->addOrderBy('a.body', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+   /**
+    * @return Article[] Returns an array of Article objects
+    */
+   public function findByPublishedAtBefore(DateTime $date): array
+   {
+       // création d'un intervalle de 1 jour
+       $interval = DateInterval::createFromDateString('1 day');
+       // ajout d'un jour à la date
+       $date = $date->add($interval);
+
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.published_at <= :date')
+           ->setParameter('date', $date->format('Y-m-d 00:00:00'))
+           ->orderBy('a.published_at', 'DESC')
+           ->addOrderBy('a.title', 'ASC')
            ->getQuery()
            ->getResult()
        ;
