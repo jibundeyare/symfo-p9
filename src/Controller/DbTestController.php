@@ -155,6 +155,11 @@ class DbTestController extends AbstractController
         $user2->getEmail();
         dump($user2);
 
+        $editor = $editorRepository->findByUser($user1);
+        dump($editor);
+        $editor = $editorRepository->findByUser($user2);
+        dump($editor);
+
         exit();
     }
 }
