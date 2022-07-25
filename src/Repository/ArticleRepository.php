@@ -67,6 +67,20 @@ class ArticleRepository extends ServiceEntityRepository
        ;
    }
 
+   /**
+    * @return Article[] Returns an array of Article objects
+    */
+   public function findByPublishedAtIsNull(): array
+   {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.published_at IS NULL')
+           ->orderBy('a.title', 'ASC')
+           ->orderBy('a.body', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

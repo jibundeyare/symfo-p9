@@ -169,6 +169,8 @@ class DbTestController extends AbstractController
         $users = $userRepository->findByRole($role);
         dump($users);
 
+        $articles = $articleRepository->findByPublishedAtIsNull();
+        dump($articles);
         exit();
     }
 }

@@ -21,7 +21,7 @@ class Article
     #[ORM\Column(type: 'text')]
     private $body;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $published_at;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'articles')]
@@ -72,7 +72,7 @@ class Article
         return $this->published_at;
     }
 
-    public function setPublishedAt(\DateTimeImmutable $published_at): self
+    public function setPublishedAt(?\DateTimeImmutable $published_at): self
     {
         $this->published_at = $published_at;
 
