@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Writer{% endblock %}
+
+{% block body %}
+    <h1>Create new Writer</h1>
+
+    {{ include('admin_writer/_form.html.twig') }}
+
+    <a href="{{ path('app_admin_writer_index') }}">back to list</a>
+{% endblock %}

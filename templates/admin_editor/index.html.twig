@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editor index{% endblock %}
+
+{% block body %}
+    <h1>Editor index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for editor in editors %}
+            <tr>
+                <td>{{ editor.id }}</td>
+                <td>
+                    <a href="{{ path('app_admin_editor_show', {'id': editor.id}) }}">show</a>
+                    <a href="{{ path('app_admin_editor_edit', {'id': editor.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_editor_new') }}">Create new</a>
+{% endblock %}
