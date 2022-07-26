@@ -103,6 +103,19 @@ class ArticleRepository extends ServiceEntityRepository
        ;
    }
 
+   /**
+    * @return Article[] Returns an array of Article objects
+    */
+   public function findNLast(int $n): array
+   {
+       return $this->createQueryBuilder('a')
+           ->orderBy('a.published_at', 'DESC')
+           ->setMaxResults($n)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

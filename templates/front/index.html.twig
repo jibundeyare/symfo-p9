@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+<h1>Homepage</h1>
+
+<h2>Les 5 derniers articles parus</h2>
+
+{% if articles %}
+<ul>
+    {% for article in articles %}
+    <li>
+        <a href="">{{ article.title }}</a>
+        {% if article.writer %}
+            (auteur : {{ article.writer.user.email }})
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+Il n'y a encore aucun article.
+{% endif %}
+{% endblock %}
