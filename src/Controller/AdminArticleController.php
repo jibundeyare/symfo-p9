@@ -24,19 +24,18 @@ class AdminArticleController extends AbstractController
     #[Route('/', name: 'app_admin_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
-        $user = $this->getUser();
-
         $articles = [];
-
+        
         if ($this->isGranted('ROLE_EDITOR')) {
             $articles = $articleRepository->findAll();
         } elseif ($this->isGranted('ROLE_WRITER')) {
-            $writer = $writerRepository->findByUser($user);
+            $user = $this->getUser();
+            $writer = $this->writerRepository->findByUser($user);
             $articles = $writer->getArticles();
         }
 
         return $this->render('admin_article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articles,
         ]);
     }
 
