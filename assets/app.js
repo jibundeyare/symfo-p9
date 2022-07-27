@@ -15,3 +15,6 @@ import './styles/app.sass';
 
 // start the Stimulus application
 import './bootstrap';
+
+// test de js
+console.log('hello webpack!');
