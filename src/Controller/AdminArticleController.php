@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/admin/article')]
 class AdminArticleController extends AbstractController
@@ -25,6 +26,9 @@ class AdminArticleController extends AbstractController
     #[Route('/', name: 'app_admin_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
+        // les utilisateurs non authentifiés sont renvoyés vers la page de login
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         // création d'une liste d'articles vide
         $articles = [];
 
@@ -69,6 +73,25 @@ class AdminArticleController extends AbstractController
     #[Route('/{id}', name: 'app_admin_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
+        // les utilisateurs non authentifiés sont renvoyés vers la page de login
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // méthode alternative à la méthode denyAccessUnlessGranted()
+        // if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        //     // l'utilisateur n'est pas authentifié
+        //     throw new AccessDeniedException();
+        // }
+
+        if (!$this->isGranted('ROLE_EDITOR') && $this->isGranted('ROLE_WRITER')) {
+            $user = $this->getUser();
+            $writer = $this->writerRepository->findByUser($user);
+            $articles = $writer->getArticles();
+            if (!$articles->contains($article)) {
+                // le rédacteur n'est pas auteur de l'article
+                throw new AccessDeniedException();
+            }
+        }
+
         return $this->render('admin_article/show.html.twig', [
             'article' => $article,
         ]);
