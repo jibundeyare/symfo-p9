@@ -18,23 +18,31 @@ class AdminArticleController extends AbstractController
 
     public function __construct(WriterRepository $writerRepository)
     {
+        // récupération du writer repository (grâce à l'auto wiring ci-dessus)
         $this->writerRepository = $writerRepository;
     }
 
     #[Route('/', name: 'app_admin_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
+        // création d'une liste d'articles vide
         $articles = [];
-        
+
         if ($this->isGranted('ROLE_EDITOR')) {
+            // si l'utilisateur est un éditeur, il peut voir la liste complète
             $articles = $articleRepository->findAll();
         } elseif ($this->isGranted('ROLE_WRITER')) {
+            // si l'utilisateur est un rédacteur, il ne peut voir que ses articles
+            // récupération du compte utilsateur
             $user = $this->getUser();
+            // récupération du profile rédacteur à partir du compte utilsateur
             $writer = $this->writerRepository->findByUser($user);
+            // récupération des articles du profile rédacteur
             $articles = $writer->getArticles();
         }
 
         return $this->render('admin_article/index.html.twig', [
+            // envoi de la liste des articles à la vue
             'articles' => $articles,
         ]);
     }
