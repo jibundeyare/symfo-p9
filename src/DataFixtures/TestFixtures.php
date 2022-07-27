@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Page;
 use App\Entity\Tag;
+use App\Entity\Writer;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ManagerRegistry;
@@ -84,6 +85,9 @@ class TestFixtures extends Fixture
         $repository = $this->doctrine->getRepository(Tag::class);
         $tags = $repository->findAll();
 
+        $repository = $this->doctrine->getRepository(Writer::class);
+        $writer = $repository->find(1);
+
         $articleDatas = [
             [
                 'title' => 'Boeuf bourguignon',
@@ -91,6 +95,7 @@ class TestFixtures extends Fixture
                 'published_at' => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2022-06-30 09:00:00'),
                 'category' => $categories[0],
                 'tags' => [$tags[2]],
+                'writer' => $writer,
             ],
             [
                 'title' => 'Spaghetti carbonara',
@@ -98,6 +103,7 @@ class TestFixtures extends Fixture
                 'published_at' => null,
                 'category' => $categories[1],
                 'tags' => [$tags[0], $tags[2]],
+                'writer' => $writer,
             ],
             [
                 'title' => 'Borsh',
@@ -105,6 +111,7 @@ class TestFixtures extends Fixture
                 'published_at' => DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2022-07-03 11:00:00'),
                 'category' => $categories[2],
                 'tags' => [$tags[2]],
+                'writer' => $writer,
             ],
         ];
 
@@ -118,6 +125,8 @@ class TestFixtures extends Fixture
             foreach ($articleData['tags'] as $tag) {
                 $article->addTag($tag);
             }
+
+            $article->setWriter($writer);
 
             $manager->persist($article);
         }
@@ -166,21 +175,27 @@ class TestFixtures extends Fixture
         $repository = $this->doctrine->getRepository(Category::class);
         $categories = $repository->findAll();
 
+        $repository = $this->doctrine->getRepository(Writer::class);
+        $writer = $repository->find(1);
+
         $pageDatas = [
             [
                 'title' => 'La cuisine française',
                 'body' => "C'est la cuisine de la France.",
                 'category' => $categories[0],
+                'writer' => $writer,
             ],
             [
                 'title' => 'La cuisine italienne',
                 'body' => "C'est la cuisine de l'Italie.",
                 'category' => $categories[1],
+                'writer' => $writer,
             ],
             [
                 'title' => 'La uisine ukrainienne',
                 'body' => "C'est la cuisine de l'Ukraine.",
                 'category' => $categories[2],
+                'writer' => $writer,
             ],
         ];
 
@@ -189,6 +204,7 @@ class TestFixtures extends Fixture
             $page->setTitle($pageData['title']);
             $page->setBody($pageData['body']);
             $page->setCategory($pageData['category']);
+            $page->setWriter($writer);
 
             $manager->persist($page);
         }

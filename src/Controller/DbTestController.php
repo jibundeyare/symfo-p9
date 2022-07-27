@@ -177,6 +177,14 @@ class DbTestController extends AbstractController
         $articles = $articleRepository->findByPublishedAtBefore($date);
         dump($articles);
 
+        $writer = $writerRepository->find(1);
+        $article1 = $articleRepository->find(1);
+        $article4 = $articleRepository->find(4);
+        $isAuthor = $writerRepository->isAuthor($writer, $article1);
+        dump($isAuthor);
+        $isAuthor = $writerRepository->isAuthor($writer, $article4);
+        dump($isAuthor);
+
         exit();
     }
 }
