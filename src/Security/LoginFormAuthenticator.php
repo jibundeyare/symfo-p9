@@ -72,17 +72,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             // il est possible de récupérer des informations sur le profil
             // $id = $editor->getId();
 
-            return new RedirectResponse($this->urlGenerator->generate('api_entrypoint'));
+            return new RedirectResponse($this->urlGenerator->generate('app_admin_article_index'));
         } elseif (in_array('ROLE_WRITER', $roles)) {
             $writer = $this->writerRepository->findByUser($user);
             // il est possible de récupérer des informations sur le profil
             // $articles = $writer->getArticles();
 
-            return new RedirectResponse($this->urlGenerator->generate('app_db_test_repository'));
+            return new RedirectResponse($this->urlGenerator->generate('app_admin_article_index'));
         }
 
         // la redirection par défaut pour les utilisateurs qui n'ont que le rôle 'ROLE_USER'
-        return new RedirectResponse($this->urlGenerator->generate('app_db_test_repository'));
+        return new RedirectResponse($this->urlGenerator->generate('app_front_index'));
     }
 
     protected function getLoginUrl(Request $request): string
