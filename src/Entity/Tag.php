@@ -7,7 +7,6 @@ use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Length(min: 5, max: 10)\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource]
