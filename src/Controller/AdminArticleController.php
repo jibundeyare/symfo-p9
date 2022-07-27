@@ -135,8 +135,18 @@ class AdminArticleController extends AbstractController
         if (!$this->isGranted('ROLE_EDITOR') && $this->isGranted('ROLE_WRITER')) {
             $user = $this->getUser();
             $writer = $this->writerRepository->findByUser($user);
-            $articles = $writer->getArticles();
-            if (!$articles->contains($article)) {
+
+            // première méthode pour vérifier si un rédacteur est auteur d'un article ou non
+            // $articles = $writer->getArticles();
+            // if (!$articles->contains($article)) {
+            //     // le rédacteur n'est pas auteur de l'article
+            //     throw new AccessDeniedException();
+            //     // on peut aussi générer une erreur Not Found 404 
+            //     // throw new NotFoundHttpException();
+            // }
+
+            // deuxième méthode pour vérifier si un rédacteur est auteur d'un article ou non
+            if (!$this->writerRepository->isAuthor($writer, $article)) {
                 // le rédacteur n'est pas auteur de l'article
                 throw new AccessDeniedException();
                 // on peut aussi générer une erreur Not Found 404 
