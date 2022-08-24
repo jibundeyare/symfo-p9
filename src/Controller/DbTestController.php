@@ -11,6 +11,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\EditorRepository;
 use App\Repository\UserRepository;
 use App\Repository\WriterRepository;
+use App\Service\ParityChecker;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DbTestController extends AbstractController
 {
+    #[Route('/db/test/parity-checker', name: 'app_db_test_paritychecker')]
+    public function parityChecker(ParityChecker $checker): Response
+    {
+        $result = $checker->isEven(1);
+        dump($result);
+
+        $result = $checker->isEven(2);
+        dump($result);
+
+        exit();
+    }
+
     #[Route('/db/test/fixtures', name: 'app_db_test_fixtures')]
     public function fixtures(ManagerRegistry $doctrine): Response
     {
