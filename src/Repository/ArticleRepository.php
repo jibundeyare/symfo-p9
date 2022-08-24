@@ -106,13 +106,20 @@ class ArticleRepository extends ServiceEntityRepository
    /**
     * @return Article[] Returns an array of Article objects
     */
-   public function findNLast(int $n): array
+   public function findNLastPublished(int $n): array
    {
-       return $this->createQueryBuilder('a')
-           ->orderBy('a.published_at', 'DESC')
-           ->setMaxResults($n)
-           ->getQuery()
-           ->getResult()
+        $date = new DateTime();
+
+        return $this->createQueryBuilder('a')
+            // on filtre les articles qui ne paraîtront que dans le futur
+            ->andWhere('a.published_at <= :date')
+            // on filtre les articles qui non publiés (c-à-d qui ont une date de publication nulle)
+            ->andWhere('a.published_at IS NOT NULL')
+            ->orderBy('a.published_at', 'DESC')
+            ->setMaxResults($n)
+            ->setParameter('date', $date->format('Y-m-d H:i:s'))
+            ->getQuery()
+            ->getResult()
        ;
    }
 
